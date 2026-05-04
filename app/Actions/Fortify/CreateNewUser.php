@@ -24,10 +24,23 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
         ])->validate();
 
+        // Original code preserved as requested:
+        // return User::create([
+        //     'name' => $input['name'],
+        //     'email' => $input['email'],
+        //     'password' => $input['password'],
+        // ]);
+
+        // Laravel/Eloquent adaptation for the new User model fields:
         return User::create([
-            'name' => $input['name'],
+            'fullname' => $input['fullname'] ?? null,
+            'firstname' => $input['firstname'] ?? null,
+            'lastname' => $input['lastname'] ?? null,
+            'extname' => $input['extname'] ?? null,
             'email' => $input['email'],
             'password' => $input['password'],
+            'job_title' => $input['job_title'] ?? null,
+            'role' => $input['role'] ?? 'user', // Set default or input role
         ]);
     }
 }

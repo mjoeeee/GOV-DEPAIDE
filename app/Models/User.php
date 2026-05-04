@@ -11,6 +11,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $table = 'tbl_user';
+    protected $primaryKey = 'userId';
+    public $timestamps = false;
+
     protected $fillable = [
         'fullname',
         'firstname',

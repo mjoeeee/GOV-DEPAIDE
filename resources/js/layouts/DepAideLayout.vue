@@ -67,7 +67,7 @@ const currentYear = new Date().getFullYear();
         <!-- Top Navbar -->
         <nav class="top-navbar">
             <Link href="/dashboard">
-                <img src="/images/logo.png" alt="DepEd Logo" class="navbar-logo" />
+                <img src="/images/deped-ozamiz-2.png" alt="DepEd Logo" class="navbar-logo" />
             </Link>
             <button class="burger-menu" @click="toggleSidebar" aria-label="Toggle sidebar">
                 <div></div>
@@ -79,8 +79,10 @@ const currentYear = new Date().getFullYear();
         <!-- Sidebar -->
         <aside class="sidebar" :class="{ active: sidebarOpen }" id="sidebar">
             <div class="sidebar-profile">
-                <i class="fas fa-user-circle"></i>
-                <div class="user-name">{{ user?.fullname }}</div>
+                <div class="profile-pill">
+                    <i class="fas fa-user-circle"></i>
+                    <div class="user-name">{{ user?.fullname }}</div>
+                </div>
             </div>
 
             <nav class="sidebar-nav">

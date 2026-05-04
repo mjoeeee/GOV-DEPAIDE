@@ -110,95 +110,125 @@ onMounted(async () => {
 <template>
     <Head title="Dashboard" />
 
-    <div class="page-header">
-        <h1>Dashboard</h1>
-    </div>
+    <div class="dashboard-wrapper">
+        <div class="dashboard-title">Dashboard</div>
 
-    <!-- Summary Cards -->
-    <div class="summary-cards">
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-tools"></i></div>
-            <div class="card-title">ICT Maintenance</div>
-            <div class="card-actions">
-                <Link href="/ict-maintenance" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus"></i> Request
-                </Link>
-                <Link :href="`/status?type=ICT Maintenance`" class="custom-btn">
-                    <i class="fas fa-list-check"></i> Total: {{ ict_maintenance_count }}
-                </Link>
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <!-- 1. DepEd Email Creation -->
+            <div class="card">
+                <div class="card-header-icon">
+                    <div class="card-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="card-title">DepEd Email Creation</div>
+                </div>
+                <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
+                    <span v-if="deped_email_already_requested" class="status-text-completed">Already Requested</span>
+                    <span v-else>Not yet requested</span>
+                </div>
+                <div class="card-actions">
+                    <Link href="/deped-email" class="btn btn-outline-primary btn-sm">
+                        Request
+                    </Link>
+                    <Link href="/status?type=DepEd Email Request" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> view status
+                    </Link>
+                </div>
+            </div>
+
+            <!-- 2. DepEd Email Concern -->
+            <div class="card">
+                <div class="card-header-icon">
+                    <div class="card-icon"><i class="fas fa-key"></i></div>
+                    <div class="card-title">DepEd Email Concern</div>
+                </div>
+                <div class="card-actions">
+                    <Link href="/email-concern" class="btn btn-outline-primary btn-sm">
+                        Request
+                    </Link>
+                    <Link :href="`/status?type=Email Concern`" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: {{ email_concern_count }}
+                    </Link>
+                </div>
+            </div>
+
+            <!-- 3. DCP Maintenance -->
+            <div class="card">
+                <div class="card-header-icon">
+                    <div class="card-icon"><i class="fas fa-tools"></i></div>
+                    <div class="card-title">DCP Maintenance</div>
+                </div>
+                <div class="card-actions">
+                    <Link href="/ict-maintenance" class="btn btn-outline-primary btn-sm">
+                        Request
+                    </Link>
+                    <Link :href="`/status?type=ICT Maintenance`" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: {{ ict_maintenance_count }}
+                    </Link>
+                </div>
+            </div>
+
+            <!-- 4. ICT Assistance -->
+            <div class="card">
+                <div class="card-header-icon">
+                    <div class="card-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="card-title">ICT Assistance</div>
+                </div>
+                <div class="card-actions">
+                    <Link href="#" class="btn btn-outline-primary btn-sm">
+                        Request
+                    </Link>
+                    <Link href="#" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: 0
+                    </Link>
+                </div>
+            </div>
+
+            <!-- 5. DCP Equipment Inspection -->
+            <div class="card">
+                <div class="card-header-icon">
+                    <div class="card-icon"><i class="fas fa-clipboard-check"></i></div>
+                    <div class="card-title">DCP Equipment Inspection</div>
+                </div>
+                <div class="card-actions">
+                    <Link href="/inspection-form" class="btn btn-outline-primary btn-sm">
+                        Request
+                    </Link>
+                    <Link :href="`/status?type=ICT Equipment Inspection`" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: {{ inspection_count }}
+                    </Link>
+                </div>
+            </div>
+
+            <!-- 6. Digital Production -->
+            <div class="card">
+                <div class="card-header-icon">
+                    <div class="card-icon"><i class="fas fa-video"></i></div>
+                    <div class="card-title">Digital Production</div>
+                </div>
+                <div class="card-actions">
+                    <Link href="#" class="btn btn-outline-primary btn-sm">
+                        Request
+                    </Link>
+                    <Link href="#" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: 0
+                    </Link>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-clipboard-check"></i></div>
-            <div class="card-title">ICT Equipment Inspection</div>
-            <div class="card-actions">
-                <Link href="/inspection-form" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus"></i> Request
-                </Link>
-                <Link :href="`/status?type=ICT Equipment Inspection`" class="custom-btn">
-                    <i class="fas fa-list-check"></i> Total: {{ inspection_count }}
-                </Link>
+        <!-- Calendar Section -->
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <button class="btn btn-primary btn-sm" @click="toggleCalendar" style="position: absolute; left: 0;">
+                    <i :class="calendarVisible ? 'fas fa-compress' : 'fas fa-expand'"></i>
+                    {{ calendarVisible ? 'Minimize' : 'Enlarge' }}
+                </button>
+                <h2>Request Status Calendar</h2>
             </div>
-        </div>
-
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-key"></i></div>
-            <div class="card-title">Email Concern</div>
-            <div class="card-actions">
-                <Link href="/email-concern" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus"></i> Request
-                </Link>
-                <Link :href="`/status?type=Email Concern`" class="custom-btn">
-                    <i class="fas fa-list-check"></i> Total: {{ email_concern_count }}
-                </Link>
+            <div v-if="calendarVisible">
+                <p class="calendar-note">Click on the event to see details.</p>
+                <FullCalendar :options="calendarOptions" />
             </div>
-        </div>
-
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-envelope"></i></div>
-            <div class="card-title">DepEd Email Request</div>
-            <div class="card-actions">
-                <span v-if="deped_email_already_requested" class="badge badge-completed">Already Requested</span>
-                <span v-else class="badge badge-pending">Not yet requested</span>
-                <Link href="/status?type=DepEd Email" class="custom-btn ml-2">
-                    <i class="fas fa-eye"></i> View Status
-                </Link>
-            </div>
-        </div>
-
-        <!-- Hidden Module Cards
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-code"></i></div>
-            <div class="card-title">Software Development</div>
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-book"></i></div>
-            <div class="card-title">Documentation</div>
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-video"></i></div>
-            <div class="card-title">Audio Visual Editing</div>
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-id-card"></i></div>
-            <div class="card-title">ID Card Printing</div>
-        </div>
-        -->
-    </div>
-
-    <!-- Calendar Section -->
-    <div class="calendar-section">
-        <div class="calendar-header">
-            <button class="btn btn-primary btn-sm" @click="toggleCalendar">
-                <i :class="calendarVisible ? 'fas fa-compress' : 'fas fa-expand'"></i>
-                {{ calendarVisible ? 'Minimize' : 'Enlarge' }}
-            </button>
-            <h2>Request Status Calendar</h2>
-        </div>
-        <div v-if="calendarVisible">
-            <p class="calendar-note">Click on the event to see details.</p>
-            <FullCalendar :options="calendarOptions" />
         </div>
     </div>
 </template>

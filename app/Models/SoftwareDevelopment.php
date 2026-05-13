@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 
 class SoftwareDevelopment extends Model
 {
-    protected $table = 'software_development';
+    protected $table = 'tbl_softdev_depaide';
 
     protected $fillable = [
-        'request_id',
         'proj_name',
         'brief_desc',
         'prime_obj',
@@ -26,6 +26,15 @@ class SoftwareDevelopment extends Model
         return [
             'proj_deadline' => 'datetime',
         ];
+    }
+
+    public function getTable(): string
+    {
+        if (Schema::hasTable('tbl_softdev_depaide')) {
+            return 'tbl_softdev_depaide';
+        }
+
+        return 'software_development';
     }
 
     public function serviceRequest(): BelongsTo

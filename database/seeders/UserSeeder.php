@@ -9,16 +9,18 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'fullname' => 'Admin User',
-            'firstname' => 'Admin',
-            'lastname' => 'User',
-            'extname' => null,
-            'email' => 'admin@deped.gov.ph',
-            'password' => bcrypt('password'),
-            'job_title' => 'ICT Administrator',
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'gavino.tan@deped.gov.ph'],
+            [
+                'fullname' => 'Gavino Tan',
+                'firstname' => 'Gavino',
+                'lastname' => 'Tan',
+                'extname' => null,
+                'password' => bcrypt('password'),
+                'job_title' => 'ICT Administrator',
+                'role' => 'admin',
+            ]
+        );
 
         User::create([
             'fullname' => 'Juan Dela Cruz',

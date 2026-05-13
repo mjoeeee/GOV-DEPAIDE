@@ -6,7 +6,54 @@ import Swal from 'sweetalert2';
 const page = usePage();
 const auth = computed(() => (page.props as any).auth);
 const user = computed(() => auth.value?.user);
+const adminRequestTypeCounts = computed(() => (page.props as any).adminRequestTypeCounts ?? {});
 const currentUrl = computed(() => (page as any).url);
+const normalizedRole = computed(() =>
+    String(user.value?.role ?? '')
+        .trim()
+        .toLowerCase(),
+);
+const isAdminUser = computed(() => ['admin', 'system admin'].includes(normalizedRole.value));
+const dashboardLink = computed(() => (isAdminUser.value ? '/admin/dashboard' : '/dashboard'));
+
+const requestTypeSidebarItems = computed(() => [
+    {
+        key: 'ict_maintenance_inspection',
+        label: 'ICT Maintenance & Inspection',
+        icon: 'fas fa-tools',
+        href: '/admin/requests?request_type_table=ict_maintenance_inspection',
+    },
+    {
+        key: 'software_development',
+        label: 'Software Development',
+        icon: 'fas fa-code',
+        href: '/admin/requests?request_type_table=software_development',
+    },
+    {
+        key: 'documentation',
+        label: 'Documentation',
+        icon: 'fas fa-book',
+        href: '/admin/requests?request_type_table=documentation',
+    },
+    {
+        key: 'audio_visual_editing',
+        label: 'Audio Visual Editing',
+        icon: 'fas fa-video',
+        href: '/admin/requests?request_type_table=audio_visual_editing',
+    },
+    {
+        key: 'email_management',
+        label: 'Email Management',
+        icon: 'fas fa-envelope',
+        href: '/admin/requests?request_type_table=email_management',
+    },
+    {
+        key: 'id_card_printing',
+        label: 'ID Card Printing',
+        icon: 'fas fa-id-card',
+        href: '/admin/requests?request_type_table=id_card_printing',
+    },
+]);
 
 const sidebarOpen = ref(false);
 const dropdownOpen = ref(false);
@@ -66,9 +113,14 @@ const currentYear = new Date().getFullYear();
     <div class="layout-wrapper" :class="{ 'sidebar-open': sidebarOpen }">
         <!-- Top Navbar -->
         <nav class="top-navbar">
-            <Link href="/dashboard">
-                <img src="/images/deped-ozamiz-2.png" alt="DepEd Logo" class="navbar-logo" />
-            </Link>
+            <div class="navbar-brand">
+                <Link :href="dashboardLink" class="navbar-brand-link">
+                    <img src="/images/deped-ozamiz-2.png" alt="DepEd Logo" class="navbar-logo" />
+                </Link>
+                <Link :href="dashboardLink" class="navbar-brand-link">
+                    <img src="/images/depaide-logo.png" alt="DepAIDE Logo" class="navbar-secondary-logo" />
+                </Link>
+            </div>
             <button class="burger-menu" @click="toggleSidebar" aria-label="Toggle sidebar">
                 <div></div>
                 <div></div>
@@ -86,7 +138,7 @@ const currentYear = new Date().getFullYear();
             </div>
 
             <nav class="sidebar-nav">
-                <Link href="/dashboard" :class="{ active: isActive('/dashboard') }">
+                <Link :href="dashboardLink" :class="{ active: isActive('/dashboard') || isActive('/admin/dashboard') }">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </Link>
@@ -101,24 +153,40 @@ const currentYear = new Date().getFullYear();
                 </button>
 
                 <div class="dropdown-content" :class="{ open: dropdownOpen }">
-                    <Link href="/deped-email" :class="{ active: isActive('/deped-email') }">
-                        <i class="fas fa-envelope"></i> DepEd Email
+                    <Link href="/email-management" :class="{ active: isActive('/email-management') }">
+                        <i class="fas fa-envelope"></i> Email Management
                     </Link>
-                    <Link href="/email-concern" :class="{ active: isActive('/email-concern') }">
-                        <i class="fas fa-key"></i> Email Concern
+                    <Link href="/ict-maintenance-inspection" :class="{ active: isActive('/ict-maintenance') || isActive('/ict-maintenance-inspection') || isActive('/inspection-form') }">
+                        <i class="fas fa-tools"></i> ICT Maintenance & Inspection
                     </Link>
-                    <Link href="/ict-maintenance" :class="{ active: isActive('/ict-maintenance') }">
-                        <i class="fas fa-desktop"></i> ICT Maintenance
+                    <Link href="/documentation" :class="{ active: isActive('/documentation') }">
+                        <i class="fas fa-file-alt"></i> Documentation
                     </Link>
-                    <Link href="/inspection-form" :class="{ active: isActive('/inspection-form') }">
-                        <i class="fas fa-search"></i> ICT Equipment Inspection
+                    <Link href="/audio-visual" :class="{ active: isActive('/audio-visual') }">
+                        <i class="fas fa-video"></i> Audio Visual Editing
                     </Link>
-                    <!-- Hidden Modules
-                    <Link href="/software-development"><i class="fas fa-code"></i> Software Development</Link>
-                    <Link href="/documentation"><i class="fas fa-book"></i> Documentation</Link>
-                    <Link href="/audio-visual"><i class="fas fa-video"></i> Audio Visual Editing</Link>
-                    <Link href="/id-card"><i class="fas fa-id-card"></i> ID Card Printing</Link>
-                    -->
+                    <Link href="/software-request" :class="{ active: isActive('/software-request') }">
+                        <i class="fas fa-code"></i> Software Development
+                    </Link>
+                    <Link href="/id-card-printing" :class="{ active: isActive('/id-card-printing') }">
+                        <i class="fas fa-id-card"></i> ID Card Printing
+                    </Link>
+                </div>
+
+                <div v-if="isAdminUser" class="sidebar-section">
+                    <div class="sidebar-section-title">Pending Requests</div>
+                    <div class="sidebar-badge-list">
+                        <Link
+                            v-for="item in requestTypeSidebarItems"
+                            :key="item.key"
+                            :href="item.href"
+                            class="sidebar-badge-link"
+                        >
+                            <span class="sidebar-badge-icon"><i :class="item.icon"></i></span>
+                            <span class="sidebar-badge-label">{{ item.label }}</span>
+                            <span class="sidebar-badge-count">{{ adminRequestTypeCounts[item.key] ?? 0 }}</span>
+                        </Link>
+                    </div>
                 </div>
 
                 <Link href="/status" :class="{ active: isActive('/status') }">

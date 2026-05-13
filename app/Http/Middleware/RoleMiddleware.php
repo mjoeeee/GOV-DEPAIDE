@@ -10,7 +10,28 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (! $request->user() || $request->user()->role !== $role) {
+        $user = $request->user();
+
+        if (! $user) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Forbidden.'], 403);
+            }
+
+            return redirect('/dashboard');
+        }
+
+        $normalizedRole = mb_strtolower(trim($role));
+        $normalizedUserRole = mb_strtolower(trim((string) $user->role));
+
+        if ($normalizedRole === 'admin') {
+            if (! $user->isAdmin()) {
+                if ($request->expectsJson()) {
+                    return response()->json(['message' => 'Forbidden.'], 403);
+                }
+
+                return redirect('/dashboard');
+            }
+        } elseif ($normalizedUserRole !== $normalizedRole) {
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Forbidden.'], 403);
             }

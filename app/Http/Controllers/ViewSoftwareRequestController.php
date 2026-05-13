@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\ServiceRequest;
-use App\Models\SoftwareDevelopment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,9 +13,16 @@ class ViewSoftwareRequestController extends Controller
 {
     public function show(Request $request, int $requestId): Response
     {
-        $serviceRequest = ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)->firstOrFail();
-        $software = SoftwareDevelopment::where('request_id', $requestId)->firstOrFail();
+        $query = ServiceRequest::where('request_id', $requestId);
+
+        // Only apply user filter if not an admin
+        if (! $request->user()->isAdmin()) {
+            $query = $query->forUser($request->user()->getAuthIdentifier());
+        }
+
+        $serviceRequest = $query->firstOrFail();
+
+        $software = $serviceRequest->softwareDevelopment;
 
         return Inertia::render('ViewSoftwareRequest', [
             'serviceRequest' => $serviceRequest,
@@ -38,9 +44,16 @@ class ViewSoftwareRequestController extends Controller
 
     public function update(Request $request, int $requestId): RedirectResponse
     {
-        ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)->firstOrFail();
-        $software = SoftwareDevelopment::where('request_id', $requestId)->firstOrFail();
+        $query = ServiceRequest::where('request_id', $requestId);
+
+        // Only apply user filter if not an admin
+        if (! $request->user()->isAdmin()) {
+            $query = $query->forUser($request->user()->getAuthIdentifier());
+        }
+
+        $serviceRequest = $query->firstOrFail();
+
+        $software = $serviceRequest->softwareDevelopment;
 
         $validated = $request->validate([
             'projName' => 'required|string|max:255',

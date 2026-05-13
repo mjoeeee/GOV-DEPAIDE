@@ -6,6 +6,8 @@ use App\Models\PasswordResetRequest;
 use App\Models\ServiceRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,18 +32,28 @@ class EmailConcernController extends Controller
         }
 
         $serviceRequest = ServiceRequest::create([
-            'user_id' => $request->user()->id,
+            'user_id' => (int) $request->user()->getAuthIdentifier(),
             'request_type_table' => 'password_reset',
             'stat' => 'Pending',
         ]);
 
-        PasswordResetRequest::create([
-            'request_id' => $serviceRequest->request_id,
-            'user_id' => $request->user()->id,
-            'email' => $request->user()->email,
-            'reason' => $validated['reason'],
-            'attachment' => $attachmentPath,
-        ]);
+        if (Schema::hasTable('tbl_passreset_depaide')) {
+            $legacyId = DB::table('tbl_passreset_depaide')->insertGetId([
+                'reason' => $validated['reason'],
+                'attachment' => $attachmentPath,
+            ]);
+
+            $serviceRequest->request_type_id = $legacyId;
+            $serviceRequest->save();
+        } else {
+            PasswordResetRequest::create([
+                'request_id' => $serviceRequest->request_id,
+                'user_id' => $request->user()->id,
+                'email' => $request->user()->email,
+                'reason' => $validated['reason'],
+                'attachment' => $attachmentPath,
+            ]);
+        }
 
         return redirect()->route('email-concern.create')->with('success', 'Email concern submitted successfully!');
     }

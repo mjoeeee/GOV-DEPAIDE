@@ -11,8 +11,15 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    private const ADMIN_ROLES = [
+        'admin',
+        'system admin',
+    ];
+
     protected $table = 'tbl_user';
+
     protected $primaryKey = 'userId';
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -40,11 +47,15 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array(
+            mb_strtolower(trim((string) $this->role)),
+            self::ADMIN_ROLES,
+            true
+        );
     }
 
     public function serviceRequests(): HasMany
     {
-        return $this->hasMany(ServiceRequest::class);
+        return $this->hasMany(ServiceRequest::class, 'userId', 'userId');
     }
 }

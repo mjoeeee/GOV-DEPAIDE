@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PasswordResetRequest;
 use App\Models\ServiceRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,11 +13,16 @@ class ViewEmailConcernController extends Controller
 {
     public function show(Request $request, int $requestId): Response
     {
-        $serviceRequest = ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        $query = ServiceRequest::where('request_id', $requestId);
 
-        $concern = PasswordResetRequest::where('request_id', $requestId)->firstOrFail();
+        // Only apply user filter if not an admin
+        if (! $request->user()->isAdmin()) {
+            $query = $query->forUser($request->user()->getAuthIdentifier());
+        }
+
+        $serviceRequest = $query->firstOrFail();
+
+        $concern = $serviceRequest->passwordResetRequest;
 
         return Inertia::render('ViewEmailConcern', [
             'serviceRequest' => $serviceRequest,
@@ -35,11 +39,16 @@ class ViewEmailConcernController extends Controller
 
     public function update(Request $request, int $requestId): RedirectResponse
     {
-        ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        $query = ServiceRequest::where('request_id', $requestId);
 
-        $concern = PasswordResetRequest::where('request_id', $requestId)->firstOrFail();
+        // Only apply user filter if not an admin
+        if (! $request->user()->isAdmin()) {
+            $query = $query->forUser($request->user()->getAuthIdentifier());
+        }
+
+        $serviceRequest = $query->firstOrFail();
+
+        $concern = $serviceRequest->passwordResetRequest;
 
         $validated = $request->validate([
             'reason' => 'required|string',

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IctEquipmentInspection;
 use App\Models\ServiceRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,11 +12,16 @@ class ViewIctInspectionController extends Controller
 {
     public function show(Request $request, int $requestId): Response
     {
-        $serviceRequest = ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        $query = ServiceRequest::where('request_id', $requestId);
 
-        $inspection = IctEquipmentInspection::where('request_id', $requestId)->firstOrFail();
+        // Only apply user filter if not an admin
+        if (! $request->user()->isAdmin()) {
+            $query = $query->forUser($request->user()->getAuthIdentifier());
+        }
+
+        $serviceRequest = $query->firstOrFail();
+
+        $inspection = $serviceRequest->ictEquipmentInspection;
 
         return Inertia::render('ViewIctInspection', [
             'serviceRequest' => $serviceRequest,
@@ -37,11 +41,16 @@ class ViewIctInspectionController extends Controller
 
     public function update(Request $request, int $requestId): RedirectResponse
     {
-        ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        $query = ServiceRequest::where('request_id', $requestId);
 
-        $inspection = IctEquipmentInspection::where('request_id', $requestId)->firstOrFail();
+        // Only apply user filter if not an admin
+        if (! $request->user()->isAdmin()) {
+            $query = $query->forUser($request->user()->getAuthIdentifier());
+        }
+
+        $serviceRequest = $query->firstOrFail();
+
+        $inspection = $serviceRequest->ictEquipmentInspection;
 
         $validated = $request->validate([
             'item' => 'required|string|max:255',

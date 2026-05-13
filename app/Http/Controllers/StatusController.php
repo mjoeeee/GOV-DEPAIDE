@@ -11,7 +11,7 @@ class StatusController extends Controller
 {
     public function index(Request $request): Response
     {
-        $requests = ServiceRequest::where('user_id', $request->user()->id)
+        $requests = ServiceRequest::forUser((int) $request->user()->getAuthIdentifier())
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function ($req) {

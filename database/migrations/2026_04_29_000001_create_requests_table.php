@@ -10,7 +10,8 @@ return new class extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id('request_id');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('userId')->on('tbl_user')->onDelete('cascade');
             $table->string('request_type_table');
             $table->enum('stat', ['Pending', 'In Progress', 'Completed', 'Rejected'])->default('Pending');
             $table->text('remarks')->nullable();

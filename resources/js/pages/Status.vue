@@ -38,8 +38,13 @@ const statusClass: Record<string, string> = {
 const viewRoutes: Record<string, string> = {
     'ict_maintenance': '/status/view/ict-maintenance',
     'ict_equipment_inspection': '/status/view/ict-inspection',
-    'password_reset': '/status/view/email-concern',
+    'email_management': '/status/view/email-management',
+    'password_reset': '/status/view/email-management',
+    'deped_email_request': '/status/view/email-management',
     'software_development': '/status/view/software-request',
+    'documentation': '/status/view/documentation',
+    'audio_visual_editing': '/status/view/audio-visual-editing',
+    'id_card_printing': '/status/view/id-card-printing',
 };
 
 const filteredRequests = computed(() => {
@@ -172,21 +177,19 @@ onMounted(() => {
             </thead>
             <tbody>
                 <tr v-for="req in paginatedRequests" :key="req.request_id">
-                    <td>
+                    <td class="action-cell">
                         <div class="action-icons">
                             <a
                                 v-if="getViewUrl(req.request_type_table, req.request_id)"
                                 :href="getViewUrl(req.request_type_table, req.request_id)!"
-                                style="color:#dc3545;"
-                                title="Edit"
+                                class="btn btn-secondary btn-icon btn-sm"
+                                title="View details"
                             >
-                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-eye"></i>
                             </a>
-                            <span v-if="req.request_type_table === 'deped_email_request'" style="width:24px;display:inline-block;"></span>
                             <button
                                 v-if="req.stat === 'Completed'"
                                 :class="req.rated ? 'star-rated' : 'star-unrated'"
-                                :style="req.request_type_table === 'deped_email_request' ? 'margin-left:38px' : ''"
                                 @click="showRatingPopup(req.mapped_type, req.request_id, req.rated)"
                                 title="Rate"
                             >
@@ -233,3 +236,20 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<style scoped>
+.action-icons,
+.action-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+    text-align: center;
+    white-space: nowrap;
+}
+</style>

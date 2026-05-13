@@ -10,8 +10,8 @@ class RatingController extends Controller
 {
     public function updateRated(Request $request, int $requestId): JsonResponse
     {
-        $serviceRequest = ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)
+        $serviceRequest = ServiceRequest::forUser($request->user()->getAuthIdentifier())
+            ->where('request_id', $requestId)
             ->firstOrFail();
 
         $serviceRequest->update(['rated' => true]);

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DepedEmailRequest;
 use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,32 +11,39 @@ class DashboardController extends Controller
 {
     public function index(Request $request): Response
     {
-        $userId = $request->user()->id;
+        $userId = (int) $request->user()->getAuthIdentifier();
 
-        $ictMaintenanceCount = ServiceRequest::where('user_id', $userId)
-            ->where('request_type_table', 'ict_maintenance')
+        $ictMaintenanceInspectionCount = ServiceRequest::forUser($userId)
+            ->whereIn('request_type_table', ['ict_maintenance_inspection', 'ict_maintenance', 'ict_equipment_inspection'])
             ->count();
 
-        $inspectionCount = ServiceRequest::where('user_id', $userId)
-            ->where('request_type_table', 'ict_equipment_inspection')
+        $emailManagementCount = ServiceRequest::forUser($userId)
+            ->whereIn('request_type_table', ['email_management', 'deped_email_request', 'password_reset'])
             ->count();
 
-        $emailConcernCount = ServiceRequest::where('user_id', $userId)
-            ->where('request_type_table', 'password_reset')
+        $documentationCount = ServiceRequest::forUser($userId)
+            ->where('request_type_table', 'documentation')
             ->count();
 
-        $depedEmailCount = ServiceRequest::where('user_id', $userId)
-            ->where('request_type_table', 'deped_email_request')
+        $softwareDevelopmentCount = ServiceRequest::forUser($userId)
+            ->where('request_type_table', 'software_development')
             ->count();
 
-        $depedEmailAlreadyRequested = DepedEmailRequest::where('user_id', $userId)->exists();
+        $audioVisualEditingCount = ServiceRequest::forUser($userId)
+            ->where('request_type_table', 'audio_visual_editing')
+            ->count();
+
+        $idCardPrintingCount = ServiceRequest::forUser($userId)
+            ->where('request_type_table', 'id_card_printing')
+            ->count();
 
         return Inertia::render('Dashboard', [
-            'ict_maintenance_count' => $ictMaintenanceCount,
-            'inspection_count' => $inspectionCount,
-            'email_concern_count' => $emailConcernCount,
-            'deped_email_count' => $depedEmailCount,
-            'deped_email_already_requested' => $depedEmailAlreadyRequested,
+            'ict_maintenance_inspection_count' => $ictMaintenanceInspectionCount,
+            'email_management_count' => $emailManagementCount,
+            'documentation_count' => $documentationCount,
+            'software_development_count' => $softwareDevelopmentCount,
+            'audio_visual_editing_count' => $audioVisualEditingCount,
+            'id_card_printing_count' => $idCardPrintingCount,
         ]);
     }
 }

@@ -13,9 +13,11 @@ defineOptions({ layout: DepAideLayout });
 const props = defineProps<{
     ict_maintenance_count: number;
     inspection_count: number;
-    email_concern_count: number;
-    deped_email_count: number;
-    deped_email_already_requested: boolean;
+    email_management_count: number;
+    documentation_count: number;
+    software_development_count: number;
+    audio_visual_editing_count: number;
+    id_card_printing_count: number;
 }>();
 
 const page = usePage();
@@ -38,6 +40,7 @@ const typeMap: Record<string, string> = {
     'audio_visual_editing': 'Audio Visual Editing',
     'deped_email_request': 'DepEd Email Request',
     'password_reset': 'Email Concern',
+    'email_management': 'Email Management',
     'id_card_printing': 'ID Card Printing',
 };
 
@@ -115,38 +118,21 @@ onMounted(async () => {
 
         <!-- Summary Cards -->
         <div class="summary-cards">
-            <!-- 1. DepEd Email Creation -->
+            <!-- 1. Email Management -->
             <div class="card">
                 <div class="card-header-icon">
                     <div class="card-icon"><i class="fas fa-envelope"></i></div>
-                    <div class="card-title">DepEd Email Creation</div>
+                    <div class="card-title">Email Management</div>
                 </div>
                 <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
-                    <span v-if="deped_email_already_requested" class="status-text-completed">Already Requested</span>
-                    <span v-else>Not yet requested</span>
+                    <span>Total requests</span>
                 </div>
                 <div class="card-actions">
-                    <Link href="/deped-email" class="btn btn-outline-primary btn-sm">
+                    <Link href="/email-management" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link href="/status?type=DepEd Email Request" class="btn btn-outline-success btn-sm">
-                        <i class="fas fa-list"></i> view status
-                    </Link>
-                </div>
-            </div>
-
-            <!-- 2. DepEd Email Concern -->
-            <div class="card">
-                <div class="card-header-icon">
-                    <div class="card-icon"><i class="fas fa-key"></i></div>
-                    <div class="card-title">DepEd Email Concern</div>
-                </div>
-                <div class="card-actions">
-                    <Link href="/email-concern" class="btn btn-outline-primary btn-sm">
-                        Request
-                    </Link>
-                    <Link :href="`/status?type=Email Concern`" class="btn btn-outline-success btn-sm">
-                        <i class="fas fa-list"></i> Total: {{ email_concern_count }}
+                    <Link href="/status?type=Email Management" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: {{ email_management_count }}
                     </Link>
                 </div>
             </div>
@@ -167,18 +153,18 @@ onMounted(async () => {
                 </div>
             </div>
 
-            <!-- 4. ICT Assistance -->
+            <!-- 4. Software Development -->
             <div class="card">
                 <div class="card-header-icon">
-                    <div class="card-icon"><i class="fas fa-file-alt"></i></div>
-                    <div class="card-title">ICT Assistance</div>
+                    <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
+                    <div class="card-title">Software Development</div>
                 </div>
                 <div class="card-actions">
-                    <Link href="#" class="btn btn-outline-primary btn-sm">
+                    <Link href="/software-request" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link href="#" class="btn btn-outline-success btn-sm">
-                        <i class="fas fa-list"></i> Total: 0
+                    <Link :href="`/status?type=Software Development`" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: {{ software_development_count }}
                     </Link>
                 </div>
             </div>
@@ -199,18 +185,50 @@ onMounted(async () => {
                 </div>
             </div>
 
-            <!-- 6. Digital Production -->
+            <!-- 6. Audio Visual Editing -->
             <div class="card">
                 <div class="card-header-icon">
                     <div class="card-icon"><i class="fas fa-video"></i></div>
-                    <div class="card-title">Digital Production</div>
+                    <div class="card-title">Audio Visual Editing</div>
                 </div>
                 <div class="card-actions">
-                    <Link href="#" class="btn btn-outline-primary btn-sm">
+                    <Link href="/audio-visual" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link href="#" class="btn btn-outline-success btn-sm">
-                        <i class="fas fa-list"></i> Total: 0
+                    <Link :href="`/status?type=Audio Visual Editing`" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: {{ audio_visual_editing_count }}
+                    </Link>
+                </div>
+            </div>
+
+            <!-- 7. Documentation -->
+            <div class="card">
+                <div class="card-header-icon">
+                    <div class="card-icon"><i class="fas fa-book"></i></div>
+                    <div class="card-title">Documentation</div>
+                </div>
+                <div class="card-actions">
+                    <Link href="/documentation" class="btn btn-outline-primary btn-sm">
+                        Request
+                    </Link>
+                    <Link :href="`/status?type=Documentation`" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: {{ documentation_count }}
+                    </Link>
+                </div>
+            </div>
+
+            <!-- 8. ID Card Printing -->
+            <div class="card">
+                <div class="card-header-icon">
+                    <div class="card-icon"><i class="fas fa-id-card"></i></div>
+                    <div class="card-title">ID Card Printing</div>
+                </div>
+                <div class="card-actions">
+                    <Link href="/id-card-printing" class="btn btn-outline-primary btn-sm">
+                        Request
+                    </Link>
+                    <Link :href="`/status?type=ID Card Printing`" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-list"></i> Total: {{ id_card_printing_count }}
                     </Link>
                 </div>
             </div>

@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('deped_email_request', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('request_id');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('userId')->on('tbl_user')->onDelete('cascade');
             $table->string('office_id');
             $table->string('firstname');
             $table->string('lastname');

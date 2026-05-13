@@ -10,7 +10,7 @@ class UnratedCheckController extends Controller
 {
     public function check(Request $request): JsonResponse
     {
-        $hasUnrated = ServiceRequest::where('user_id', $request->user()->id)
+        $hasUnrated = ServiceRequest::forUser((int) $request->user()->getAuthIdentifier())
             ->where('stat', 'Completed')
             ->where('rated', false)
             ->exists();

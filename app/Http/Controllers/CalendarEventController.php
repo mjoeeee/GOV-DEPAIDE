@@ -10,7 +10,13 @@ class CalendarEventController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $events = ServiceRequest::where('user_id', $request->user()->id)
+        $query = ServiceRequest::query();
+
+        if (! $request->user()->isAdmin()) {
+            $query->forUser((int) $request->user()->getAuthIdentifier());
+        }
+
+        $events = $query
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(fn ($req) => [

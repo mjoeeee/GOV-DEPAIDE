@@ -35,7 +35,7 @@ class IctMaintenanceController extends Controller
         ]);
 
         $serviceRequest = ServiceRequest::create([
-            'user_id' => $request->user()->id,
+            'user_id' => (int) $request->user()->getAuthIdentifier(),
             'request_type_table' => 'ict_maintenance',
             'stat' => 'Pending',
         ]);

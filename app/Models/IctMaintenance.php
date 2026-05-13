@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 
 class IctMaintenance extends Model
 {
-    protected $table = 'ict_maintenance';
+    protected $table = 'tbl_ictmrf_depaide';
 
     protected $fillable = [
-        'request_id',
         'date_current',
         'time_current',
         'req_name',
@@ -20,16 +20,29 @@ class IctMaintenance extends Model
         'brand',
         'prop_no',
         'serial_no',
-        'last_repair_date',
+        'date_last_repair',
         'defects',
+        'date_inspected',
+        'IPI',
+        'DTS',
+        'recomend',
     ];
 
     protected function casts(): array
     {
         return [
             'date_current' => 'date',
-            'last_repair_date' => 'date',
+            'date_last_repair' => 'date',
         ];
+    }
+
+    public function getTable(): string
+    {
+        if (Schema::hasTable('tbl_ictmrf_depaide')) {
+            return 'tbl_ictmrf_depaide';
+        }
+
+        return 'ict_maintenance';
     }
 
     public function serviceRequest(): BelongsTo

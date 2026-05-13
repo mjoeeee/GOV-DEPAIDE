@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IctMaintenance;
 use App\Models\ServiceRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,11 +12,16 @@ class ViewIctMaintenanceController extends Controller
 {
     public function show(Request $request, int $requestId): Response
     {
-        $serviceRequest = ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        $query = ServiceRequest::where('request_id', $requestId);
 
-        $maintenance = IctMaintenance::where('request_id', $requestId)->firstOrFail();
+        // Only apply user filter if not an admin
+        if (! $request->user()->isAdmin()) {
+            $query = $query->forUser($request->user()->getAuthIdentifier());
+        }
+
+        $serviceRequest = $query->firstOrFail();
+
+        $maintenance = $serviceRequest->ictMaintenance;
 
         return Inertia::render('ViewIctMaintenance', [
             'serviceRequest' => $serviceRequest,
@@ -42,11 +46,16 @@ class ViewIctMaintenanceController extends Controller
 
     public function update(Request $request, int $requestId): RedirectResponse
     {
-        $serviceRequest = ServiceRequest::where('request_id', $requestId)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        $query = ServiceRequest::where('request_id', $requestId);
 
-        $maintenance = IctMaintenance::where('request_id', $requestId)->firstOrFail();
+        // Only apply user filter if not an admin
+        if (! $request->user()->isAdmin()) {
+            $query = $query->forUser($request->user()->getAuthIdentifier());
+        }
+
+        $serviceRequest = $query->firstOrFail();
+
+        $maintenance = $serviceRequest->ictMaintenance;
 
         $validated = $request->validate([
             'date' => 'required|date',

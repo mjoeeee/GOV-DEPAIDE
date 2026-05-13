@@ -32,6 +32,33 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect(route('dashboard', absolute: false));
     }
 
+    public function test_system_admin_users_are_redirected_to_admin_dashboard_after_login()
+    {
+        $user = User::factory()->create([
+            'role' => 'System Admin',
+        ]);
+
+        $response = $this->post(route('login.store'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect(route('admin.dashboard', absolute: false));
+    }
+
+    public function test_system_admin_users_can_visit_the_admin_dashboard()
+    {
+        $user = User::factory()->create([
+            'role' => 'System Admin',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('admin.dashboard'));
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page->component('Admin/Dashboard'));
+    }
+
     public function test_users_with_two_factor_enabled_are_redirected_to_two_factor_challenge()
     {
         $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());

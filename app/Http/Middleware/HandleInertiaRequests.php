@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -21,6 +23,16 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
 
+        $adminRequestTypeCounts = [];
+
+        if ($user && in_array(mb_strtolower(trim((string) $user->role)), ['admin', 'system admin'], true)) {
+            $adminRequestTypeCounts = ServiceRequest::select('request_type_table', DB::raw('count(*) as pending'))
+                ->where('stat', 'Pending')
+                ->groupBy('request_type_table')
+                ->pluck('pending', 'request_type_table')
+                ->toArray();
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -36,6 +48,7 @@ class HandleInertiaRequests extends Middleware
                     'role' => $user->role,
                 ] : null,
             ],
+            'adminRequestTypeCounts' => $adminRequestTypeCounts,
         ];
     }
 }

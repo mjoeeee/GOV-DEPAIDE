@@ -4,6 +4,12 @@
     </IfModule>
 
     RewriteEngine On
+    RewriteBase /depaide/
+
+    # Allow the app to run from a /depaide URL even when Apache does not
+    # automatically strip the subdirectory before handing the request to PHP.
+    RewriteRule ^depaide/?$ index.php [L]
+    RewriteRule ^depaide/(.*)$ index.php/$1 [L]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .

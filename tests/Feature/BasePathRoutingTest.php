@@ -32,34 +32,34 @@ class BasePathRoutingTest extends TestCase
         unset($_ENV['VITE_APP_BASE_PATH'], $_SERVER['VITE_APP_BASE_PATH']);
     }
 
-    public function test_login_screen_can_be_rendered_under_base_path(): void
+    public function test_login_screen_can_be_rendered_with_frontend_base_path_configured(): void
     {
-        $response = $this->get('/depaide/login');
+        $response = $this->get('/login');
 
         $response->assertOk();
     }
 
-    public function test_base_path_root_redirects_to_prefixed_login(): void
+    public function test_root_redirects_to_login_with_frontend_base_path_configured(): void
     {
-        $response = $this->get('/depaide');
+        $response = $this->get('/');
 
-        $response->assertRedirect('/depaide/login');
+        $response->assertRedirect('/login');
     }
 
-    public function test_users_are_redirected_to_prefixed_dashboard_after_login(): void
+    public function test_users_are_redirected_to_dashboard_with_frontend_base_path_configured(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/depaide/login', [
+        $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect('/depaide/dashboard');
+        $response->assertRedirect('/dashboard');
     }
 
-    public function test_authenticated_api_and_view_routes_work_under_base_path(): void
+    public function test_authenticated_api_and_view_routes_work_with_frontend_base_path_configured(): void
     {
         $user = User::factory()->create();
         $serviceRequest = ServiceRequest::create([
@@ -81,11 +81,11 @@ class BasePathRoutingTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->get('/depaide/api/calendar-events')
+            ->get('/api/calendar-events')
             ->assertOk();
 
         $this->actingAs($user)
-            ->get('/depaide/status/view/documentation/'.$serviceRequest->request_id)
+            ->get('/status/view/documentation/'.$serviceRequest->request_id)
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
                 ->component('ViewDocumentation')

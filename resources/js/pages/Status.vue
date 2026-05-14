@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
 import QRCode from 'qrcode';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -39,6 +40,7 @@ const viewRoutes: Record<string, string> = {
     'ict_maintenance': '/status/view/ict-maintenance',
     'ict_equipment_inspection': '/status/view/ict-inspection',
     'email_management': '/status/view/email-management',
+    'email_concern': '/status/view/email-concern',
     'password_reset': '/status/view/email-management',
     'deped_email_request': '/status/view/email-management',
     'software_development': '/status/view/software-request',
@@ -85,7 +87,7 @@ function truncateRemarks(text: string | null, id: number): string {
 
 function getViewUrl(type: string, id: number): string | null {
     const base = viewRoutes[type];
-    return base ? `${base}/${id}` : null;
+    return base ? appPath(`${base}/${id}`) : null;
 }
 
 async function showRatingPopup(requestType: string, requestId: number, rated: boolean) {
@@ -122,7 +124,7 @@ async function showRatingPopup(requestType: string, requestId: number, rated: bo
 
 async function updateRatedColumn(requestId: number) {
     try {
-        await fetch(`/api/update-rated/${requestId}`, {
+        await fetch(appPath(`/api/update-rated/${requestId}`), {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',

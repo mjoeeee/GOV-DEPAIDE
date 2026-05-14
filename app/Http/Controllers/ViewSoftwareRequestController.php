@@ -82,6 +82,6 @@ class ViewSoftwareRequestController extends Controller
         }
         $software->save();
 
-        return redirect("/status/view/software-request/{$requestId}?update=success");
+        return redirect()->route('status.view.software-request', ['requestId' => $requestId, 'update' => 'success']);
     }
 }

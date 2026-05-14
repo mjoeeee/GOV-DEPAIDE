@@ -7,6 +7,7 @@ import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -85,14 +86,14 @@ function handleEventClick(info: any) {
         showCloseButton: true,
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `/status?request_id=${ep.request_id}`;
+            window.location.href = appPath(`/status?request_id=${ep.request_id}`);
         }
     });
 }
 
 onMounted(async () => {
     try {
-        const res = await fetch(`/api/calendar-events`);
+        const res = await fetch(appPath('/api/calendar-events'));
         const data = await res.json();
         calendarOptions.value.events = data.map((e: any) => ({
             title: typeMap[e.request_type_table] || e.request_type_table,
@@ -128,10 +129,10 @@ onMounted(async () => {
                     <span>Total requests</span>
                 </div>
                 <div class="card-actions">
-                    <Link href="/email-management" class="btn btn-outline-primary btn-sm">
+                    <Link :href="appPath('/email-management')" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link href="/status?type=Email Management" class="btn btn-outline-success btn-sm">
+                    <Link :href="appPath('/status?type=Email Management')" class="btn btn-outline-success btn-sm">
                         <i class="fas fa-list"></i> Total: {{ email_management_count }}
                     </Link>
                 </div>
@@ -144,10 +145,10 @@ onMounted(async () => {
                     <div class="card-title">DCP Maintenance</div>
                 </div>
                 <div class="card-actions">
-                    <Link href="/ict-maintenance" class="btn btn-outline-primary btn-sm">
+                    <Link :href="appPath('/ict-maintenance')" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link :href="`/status?type=ICT Maintenance`" class="btn btn-outline-success btn-sm">
+                    <Link :href="appPath('/status?type=ICT Maintenance')" class="btn btn-outline-success btn-sm">
                         <i class="fas fa-list"></i> Total: {{ ict_maintenance_count }}
                     </Link>
                 </div>
@@ -160,10 +161,10 @@ onMounted(async () => {
                     <div class="card-title">Software Development</div>
                 </div>
                 <div class="card-actions">
-                    <Link href="/software-request" class="btn btn-outline-primary btn-sm">
+                    <Link :href="appPath('/software-request')" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link :href="`/status?type=Software Development`" class="btn btn-outline-success btn-sm">
+                    <Link :href="appPath('/status?type=Software Development')" class="btn btn-outline-success btn-sm">
                         <i class="fas fa-list"></i> Total: {{ software_development_count }}
                     </Link>
                 </div>
@@ -176,10 +177,10 @@ onMounted(async () => {
                     <div class="card-title">DCP Equipment Inspection</div>
                 </div>
                 <div class="card-actions">
-                    <Link href="/inspection-form" class="btn btn-outline-primary btn-sm">
+                    <Link :href="appPath('/inspection-form')" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link :href="`/status?type=ICT Equipment Inspection`" class="btn btn-outline-success btn-sm">
+                    <Link :href="appPath('/status?type=ICT Equipment Inspection')" class="btn btn-outline-success btn-sm">
                         <i class="fas fa-list"></i> Total: {{ inspection_count }}
                     </Link>
                 </div>
@@ -192,10 +193,10 @@ onMounted(async () => {
                     <div class="card-title">Audio Visual Editing</div>
                 </div>
                 <div class="card-actions">
-                    <Link href="/audio-visual" class="btn btn-outline-primary btn-sm">
+                    <Link :href="appPath('/audio-visual')" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link :href="`/status?type=Audio Visual Editing`" class="btn btn-outline-success btn-sm">
+                    <Link :href="appPath('/status?type=Audio Visual Editing')" class="btn btn-outline-success btn-sm">
                         <i class="fas fa-list"></i> Total: {{ audio_visual_editing_count }}
                     </Link>
                 </div>
@@ -208,10 +209,10 @@ onMounted(async () => {
                     <div class="card-title">Documentation</div>
                 </div>
                 <div class="card-actions">
-                    <Link href="/documentation" class="btn btn-outline-primary btn-sm">
+                    <Link :href="appPath('/documentation')" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link :href="`/status?type=Documentation`" class="btn btn-outline-success btn-sm">
+                    <Link :href="appPath('/status?type=Documentation')" class="btn btn-outline-success btn-sm">
                         <i class="fas fa-list"></i> Total: {{ documentation_count }}
                     </Link>
                 </div>
@@ -224,10 +225,10 @@ onMounted(async () => {
                     <div class="card-title">ID Card Printing</div>
                 </div>
                 <div class="card-actions">
-                    <Link href="/id-card-printing" class="btn btn-outline-primary btn-sm">
+                    <Link :href="appPath('/id-card-printing')" class="btn btn-outline-primary btn-sm">
                         Request
                     </Link>
-                    <Link :href="`/status?type=ID Card Printing`" class="btn btn-outline-success btn-sm">
+                    <Link :href="appPath('/status?type=ID Card Printing')" class="btn btn-outline-success btn-sm">
                         <i class="fas fa-list"></i> Total: {{ id_card_printing_count }}
                     </Link>
                 </div>

@@ -1310,7 +1310,7 @@ select.form-control {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('/images/deped-building-bg.png') no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), var(--depaide-building-bg) no-repeat center center fixed;
   background-size: cover;
   position: relative;
 }

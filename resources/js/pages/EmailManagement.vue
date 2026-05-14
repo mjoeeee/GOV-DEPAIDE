@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -52,7 +53,7 @@ function previewImage(e: Event) {
 
 function submitDepedEmail() {
     depedEmailForm.emailFormat = generatedEmail.value;
-    depedEmailForm.post('/email-management', {
+    depedEmailForm.post(appPath('/email-management'), {
         preserveScroll: true,
         onSuccess: () => {
             Swal.fire({ icon: 'success', title: 'Success!', text: 'Email Management request submitted.', timer: 2000, showConfirmButton: false });
@@ -61,7 +62,7 @@ function submitDepedEmail() {
 }
 
 function submitEmailConcern() {
-    emailConcernForm.post('/email-management', {
+    emailConcernForm.post(appPath('/email-management'), {
         forceFormData: true,
         preserveScroll: true,
         onSuccess: () => {

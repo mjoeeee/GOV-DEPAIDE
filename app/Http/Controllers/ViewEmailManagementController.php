@@ -95,7 +95,7 @@ class ViewEmailManagementController extends Controller
             'email_format' => $validated['emailFormat'],
         ]);
 
-        return redirect("/status/view/email-management/{$serviceRequest->request_id}")->with('update', 'success');
+        return redirect()->route('status.view.email-management', $serviceRequest->request_id)->with('update', 'success');
     }
 
     private function updateEmailConcern(Request $request, ServiceRequest $serviceRequest, array $emailData): RedirectResponse
@@ -118,6 +118,6 @@ class ViewEmailManagementController extends Controller
         $reset->reason = $validated['reason'];
         $reset->save();
 
-        return redirect("/status/view/email-management/{$serviceRequest->request_id}")->with('update', 'success');
+        return redirect()->route('status.view.email-management', $serviceRequest->request_id)->with('update', 'success');
     }
 }

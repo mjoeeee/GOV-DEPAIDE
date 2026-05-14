@@ -70,6 +70,6 @@ class ViewDepedEmailRequestController extends Controller
         $depedEmail->email_format = $validated['emailFormat'] ?? $depedEmail->email_format;
         $depedEmail->save();
 
-        return redirect("/status/view/deped-email-request/{$requestId}?update=success");
+        return redirect()->route('status.view.deped-email-request', ['requestId' => $requestId, 'update' => 'success']);
     }
 }

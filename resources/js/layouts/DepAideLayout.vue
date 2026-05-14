@@ -2,56 +2,57 @@
 import { ref, onMounted, computed } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import { appPath, assetPath, stripBasePath } from '@/lib/basePath';
 
 const page = usePage();
 const auth = computed(() => (page.props as any).auth);
 const user = computed(() => auth.value?.user);
 const adminRequestTypeCounts = computed(() => (page.props as any).adminRequestTypeCounts ?? {});
-const currentUrl = computed(() => (page as any).url);
+const currentUrl = computed(() => stripBasePath((page as any).url));
 const normalizedRole = computed(() =>
     String(user.value?.role ?? '')
         .trim()
         .toLowerCase(),
 );
 const isAdminUser = computed(() => ['admin', 'system admin'].includes(normalizedRole.value));
-const dashboardLink = computed(() => (isAdminUser.value ? '/admin/dashboard' : '/dashboard'));
+const dashboardLink = computed(() => appPath(isAdminUser.value ? '/admin/dashboard' : '/dashboard'));
 
 const requestTypeSidebarItems = computed(() => [
     {
         key: 'ict_maintenance_inspection',
         label: 'ICT Maintenance & Inspection',
         icon: 'fas fa-tools',
-        href: '/admin/requests?request_type_table=ict_maintenance_inspection',
+        href: appPath('/admin/requests?request_type_table=ict_maintenance_inspection'),
     },
     {
         key: 'software_development',
         label: 'Software Development',
         icon: 'fas fa-code',
-        href: '/admin/requests?request_type_table=software_development',
+        href: appPath('/admin/requests?request_type_table=software_development'),
     },
     {
         key: 'documentation',
         label: 'Documentation',
         icon: 'fas fa-book',
-        href: '/admin/requests?request_type_table=documentation',
+        href: appPath('/admin/requests?request_type_table=documentation'),
     },
     {
         key: 'audio_visual_editing',
         label: 'Audio Visual Editing',
         icon: 'fas fa-video',
-        href: '/admin/requests?request_type_table=audio_visual_editing',
+        href: appPath('/admin/requests?request_type_table=audio_visual_editing'),
     },
     {
         key: 'email_management',
         label: 'Email Management',
         icon: 'fas fa-envelope',
-        href: '/admin/requests?request_type_table=email_management',
+        href: appPath('/admin/requests?request_type_table=email_management'),
     },
     {
         key: 'id_card_printing',
         label: 'ID Card Printing',
         icon: 'fas fa-id-card',
-        href: '/admin/requests?request_type_table=id_card_printing',
+        href: appPath('/admin/requests?request_type_table=id_card_printing'),
     },
 ]);
 
@@ -81,14 +82,14 @@ function handleLogout() {
         cancelButtonColor: '#6c757d',
     }).then((result) => {
         if (result.isConfirmed) {
-            router.post('/logout');
+            router.post(appPath('/logout'));
         }
     });
 }
 
 onMounted(async () => {
     try {
-        const response = await fetch('/api/check-unrated');
+        const response = await fetch(appPath('/api/check-unrated'));
         const data = await response.json();
         if (data.has_unrated) {
             Swal.fire({
@@ -115,10 +116,10 @@ const currentYear = new Date().getFullYear();
         <nav class="top-navbar">
             <div class="navbar-brand">
                 <Link :href="dashboardLink" class="navbar-brand-link">
-                    <img src="/images/deped-ozamiz-2.png" alt="DepEd Logo" class="navbar-logo" />
+                    <img :src="assetPath('/images/deped-ozamiz-2.png')" alt="DepEd Logo" class="navbar-logo" />
                 </Link>
                 <Link :href="dashboardLink" class="navbar-brand-link">
-                    <img src="/images/depaide-logo.png" alt="DepAIDE Logo" class="navbar-secondary-logo" />
+                    <img :src="assetPath('/images/depaide-logo.png')" alt="DepAIDE Logo" class="navbar-secondary-logo" />
                 </Link>
             </div>
             <button class="burger-menu" @click="toggleSidebar" aria-label="Toggle sidebar">
@@ -153,22 +154,22 @@ const currentYear = new Date().getFullYear();
                 </button>
 
                 <div class="dropdown-content" :class="{ open: dropdownOpen }">
-                    <Link href="/email-management" :class="{ active: isActive('/email-management') }">
+                    <Link :href="appPath('/email-management')" :class="{ active: isActive('/email-management') }">
                         <i class="fas fa-envelope"></i> Email Management
                     </Link>
-                    <Link href="/ict-maintenance-inspection" :class="{ active: isActive('/ict-maintenance') || isActive('/ict-maintenance-inspection') || isActive('/inspection-form') }">
+                    <Link :href="appPath('/ict-maintenance-inspection')" :class="{ active: isActive('/ict-maintenance') || isActive('/ict-maintenance-inspection') || isActive('/inspection-form') }">
                         <i class="fas fa-tools"></i> ICT Maintenance & Inspection
                     </Link>
-                    <Link href="/documentation" :class="{ active: isActive('/documentation') }">
+                    <Link :href="appPath('/documentation')" :class="{ active: isActive('/documentation') }">
                         <i class="fas fa-file-alt"></i> Documentation
                     </Link>
-                    <Link href="/audio-visual" :class="{ active: isActive('/audio-visual') }">
+                    <Link :href="appPath('/audio-visual')" :class="{ active: isActive('/audio-visual') }">
                         <i class="fas fa-video"></i> Audio Visual Editing
                     </Link>
-                    <Link href="/software-request" :class="{ active: isActive('/software-request') }">
+                    <Link :href="appPath('/software-request')" :class="{ active: isActive('/software-request') }">
                         <i class="fas fa-code"></i> Software Development
                     </Link>
-                    <Link href="/id-card-printing" :class="{ active: isActive('/id-card-printing') }">
+                    <Link :href="appPath('/id-card-printing')" :class="{ active: isActive('/id-card-printing') }">
                         <i class="fas fa-id-card"></i> ID Card Printing
                     </Link>
                 </div>
@@ -189,7 +190,7 @@ const currentYear = new Date().getFullYear();
                     </div>
                 </div>
 
-                <Link href="/status" :class="{ active: isActive('/status') }">
+                <Link :href="appPath('/status')" :class="{ active: isActive('/status') }">
                     <i class="fas fa-info-circle"></i>
                     <span>Status</span>
                 </Link>

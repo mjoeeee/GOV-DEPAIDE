@@ -17,7 +17,7 @@ class RoleMiddleware
                 return response()->json(['message' => 'Forbidden.'], 403);
             }
 
-            return redirect('/dashboard');
+            return redirect()->route('dashboard');
         }
 
         $normalizedRole = mb_strtolower(trim($role));
@@ -29,14 +29,14 @@ class RoleMiddleware
                     return response()->json(['message' => 'Forbidden.'], 403);
                 }
 
-                return redirect('/dashboard');
+                return redirect()->route('dashboard');
             }
         } elseif ($normalizedUserRole !== $normalizedRole) {
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Forbidden.'], 403);
             }
 
-            return redirect('/dashboard');
+            return redirect()->route('dashboard');
         }
 
         return $next($request);

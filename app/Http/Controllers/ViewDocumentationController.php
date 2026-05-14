@@ -73,6 +73,6 @@ class ViewDocumentationController extends Controller
         $documentation->photo_link = $validated['photoLink'] ?? null;
         $documentation->save();
 
-        return redirect("/status/view/documentation/{$requestId}?update=success");
+        return redirect()->route('status.view.documentation', ['requestId' => $requestId, 'update' => 'success']);
     }
 }

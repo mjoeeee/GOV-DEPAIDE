@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -40,7 +41,7 @@ function resetForm() {
 }
 
 function submit() {
-    form.post('/software-request', {
+    form.post(appPath('/software-request'), {
         forceFormData: true,
         preserveScroll: true,
         onSuccess: () => {

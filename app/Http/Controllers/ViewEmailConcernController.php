@@ -68,6 +68,6 @@ class ViewEmailConcernController extends Controller
 
         $concern->save();
 
-        return redirect("/status/view/email-concern/{$requestId}?update=success");
+        return redirect()->route('status.view.email-concern', ['requestId' => $requestId, 'update' => 'success']);
     }
 }

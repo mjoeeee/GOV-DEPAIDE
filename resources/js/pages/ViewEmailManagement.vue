@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import MinimalLayout from '@/layouts/MinimalLayout.vue';
+import { appPath } from '@/lib/basePath';
 import Swal from 'sweetalert2';
 
 defineOptions({ layout: MinimalLayout });
@@ -48,11 +49,11 @@ function previewImage(e: Event) {
 }
 
 function submitDepedEmail() {
-    depedEmailForm.post(`/status/view/email-management/${props.emailManagement.request_id}`);
+    depedEmailForm.post(appPath(`/status/view/email-management/${props.emailManagement.request_id}`));
 }
 
 function submitEmailConcern() {
-    emailConcernForm.post(`/status/view/email-management/${props.emailManagement.request_id}`, { forceFormData: true });
+    emailConcernForm.post(appPath(`/status/view/email-management/${props.emailManagement.request_id}`), { forceFormData: true });
 }
 
 onMounted(() => {
@@ -88,7 +89,7 @@ onMounted(() => {
 
                 <div class="d-flex justify-content-between mt-3">
                     <button type="submit" class="btn btn-primary" :disabled="depedEmailForm.processing"><i class="fas fa-save"></i> Update Details</button>
-                    <a href="/status" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
+                    <a :href="appPath('/status')" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
                 </div>
             </form>
         </div>
@@ -125,7 +126,7 @@ onMounted(() => {
 
                 <div class="d-flex justify-content-between mt-3">
                     <button type="submit" class="btn btn-primary" :disabled="emailConcernForm.processing"><i class="fas fa-save"></i> Update Details</button>
-                    <a href="/status" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
+                    <a :href="appPath('/status')" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
                 </div>
             </form>
         </div>

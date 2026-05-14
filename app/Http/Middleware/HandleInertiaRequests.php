@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'basePath' => config('app.base_path') ? '/'.config('app.base_path') : '',
             'auth' => [
                 'user' => $user ? [
                     'id' => $user->id,

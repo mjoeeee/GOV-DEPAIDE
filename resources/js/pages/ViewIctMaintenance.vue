@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import MinimalLayout from '@/layouts/MinimalLayout.vue';
+import { appPath } from '@/lib/basePath';
 import Swal from 'sweetalert2';
 
 defineOptions({ layout: MinimalLayout });
@@ -27,7 +28,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.post(`/status/view/ict-maintenance/${props.maintenance.request_id}`);
+    form.post(appPath(`/status/view/ict-maintenance/${props.maintenance.request_id}`));
 }
 
 onMounted(() => {
@@ -77,7 +78,7 @@ onMounted(() => {
                 <button type="submit" class="btn btn-primary" :disabled="form.processing">
                     <i class="fas fa-save"></i> Update Details
                 </button>
-                <a href="/status" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
+                <a :href="appPath('/status')" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
             </div>
         </form>
     </div>

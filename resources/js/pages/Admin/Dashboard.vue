@@ -7,6 +7,7 @@ import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -97,7 +98,7 @@ onUnmounted(() => {
 
 async function fetchCalendarEvents() {
     try {
-        const res = await fetch('/api/calendar-events');
+        const res = await fetch(appPath('/api/calendar-events'));
         const data = await res.json();
 
         calendarEvents.value = data.map((event: any) => ({
@@ -153,7 +154,7 @@ function handleEventClick(info: any) {
         showCloseButton: true,
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `/status?request_id=${ep.request_id}`;
+            window.location.href = appPath(`/status?request_id=${ep.request_id}`);
         }
     });
 }
@@ -452,6 +453,6 @@ const typeCardIcons: Record<string, string> = {
                 </tr>
             </tbody>
         </table>
-        <div class="mt-3"><Link href="/admin/requests" class="btn btn-primary btn-sm">View All Requests</Link></div>
+        <div class="mt-3"><Link :href="appPath('/admin/requests')" class="btn btn-primary btn-sm">View All Requests</Link></div>
     </div>
 </template>

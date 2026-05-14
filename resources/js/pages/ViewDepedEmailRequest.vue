@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import MinimalLayout from '@/layouts/MinimalLayout.vue';
+import { appPath } from '@/lib/basePath';
 import Swal from 'sweetalert2';
 
 defineOptions({ layout: MinimalLayout });
@@ -19,7 +20,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.post(`/status/view/deped-email-request/${props.depedEmail.request_id}`);
+    form.post(appPath(`/status/view/deped-email-request/${props.depedEmail.request_id}`));
 }
 
 onMounted(() => {
@@ -49,7 +50,7 @@ onMounted(() => {
 
             <div class="d-flex justify-content-between mt-3">
                 <button type="submit" class="btn btn-primary" :disabled="form.processing"><i class="fas fa-save"></i> Update Details</button>
-                <a href="/status" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
+                <a :href="appPath('/status')" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
             </div>
         </form>
     </div>

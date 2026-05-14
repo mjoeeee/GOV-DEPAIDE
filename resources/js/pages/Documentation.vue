@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -21,7 +22,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.post('/documentation', {
+    form.post(appPath('/documentation'), {
         preserveScroll: true,
         onSuccess: () => {
             Swal.fire({ icon: 'success', title: 'Success!', text: 'Documentation request submitted.', timer: 2000, showConfirmButton: false });

@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -93,6 +94,7 @@ const viewRoutes: Record<string, string> = {
     'ict_maintenance': '/admin/view/ict-maintenance',
     'ict_equipment_inspection': '/admin/view/ict-inspection',
     'email_management': '/admin/view/email-management',
+    'email_concern': '/admin/view/email-concern',
     'deped_email_request': '/admin/view/deped-email-request',
     'password_reset': '/admin/view/password-reset',
     'software_development': '/admin/view/software-request',
@@ -103,7 +105,7 @@ const viewRoutes: Record<string, string> = {
 
 function getViewUrl(type: string, id: number): string | null {
     const base = viewRoutes[type];
-    return base ? `${base}/${id}` : null;
+    return base ? appPath(`${base}/${id}`) : null;
 }
 
 const filteredRequests = computed(() => {
@@ -187,7 +189,7 @@ async function updateStatus(requestId: number, currentStat: string, currentRemar
     });
 
     if (formValues) {
-        router.patch(`/admin/requests/${requestId}`, formValues, {
+        router.patch(appPath(`/admin/requests/${requestId}`), formValues, {
             preserveScroll: true,
             onSuccess: () => {
                 Swal.fire({ icon: 'success', title: 'Updated!', timer: 1500, showConfirmButton: false });
@@ -208,7 +210,7 @@ async function deleteRequest(requestId: number) {
     });
 
     if (result.isConfirmed) {
-        router.delete(`/admin/requests/${requestId}`, {
+        router.delete(appPath(`/admin/requests/${requestId}`), {
             preserveScroll: true,
             onSuccess: () => {
                 Swal.fire({ icon: 'success', title: 'Deleted!', timer: 1500, showConfirmButton: false });

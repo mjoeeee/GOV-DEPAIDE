@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -32,7 +33,7 @@ function restrictNumericDash(e: Event) {
 
 function submit() {
     form.emailFormat = generatedEmail.value;
-    form.post('/deped-email', {
+    form.post(appPath('/deped-email'), {
         preserveScroll: true,
         onSuccess: () => {
             Swal.fire({ icon: 'success', title: 'Success!', text: 'DepEd Email request submitted.', timer: 2000, showConfirmButton: false });

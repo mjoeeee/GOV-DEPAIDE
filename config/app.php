@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'base_path' => trim((string) env('BASE_PATH', ''), '/'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

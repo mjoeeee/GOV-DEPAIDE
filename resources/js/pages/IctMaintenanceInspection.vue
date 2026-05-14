@@ -2,6 +2,7 @@
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -53,7 +54,7 @@ function formatPesoInput(e: Event) {
 function clearCost() { form.acquisitionCost = ''; }
 
 function submit() {
-    form.post('/ict-maintenance-inspection', {
+    form.post(appPath('/ict-maintenance-inspection'), {
         preserveScroll: true,
         onSuccess: () => {
             const message = form.type === 'maintenance' 

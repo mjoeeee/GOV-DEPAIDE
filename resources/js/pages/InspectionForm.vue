@@ -2,6 +2,7 @@
 import { Head, useForm } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -35,7 +36,7 @@ function formatPesoInput(e: Event) {
 function clearCost() { form.acquisitionCost = ''; }
 
 function submit() {
-    form.post('/inspection-form', {
+    form.post(appPath('/inspection-form'), {
         preserveScroll: true,
         onSuccess: () => {
             Swal.fire({ icon: 'success', title: 'Success!', text: 'Inspection request submitted.', timer: 2000, showConfirmButton: false });

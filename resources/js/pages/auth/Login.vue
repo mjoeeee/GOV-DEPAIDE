@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useForm, Head } from '@inertiajs/vue3';
+import { appPath, assetPath } from '@/lib/basePath';
 
 const props = defineProps<{
     status?: string;
@@ -20,7 +21,7 @@ setTimeout(() => {
 }, 500);
 
 function submit() {
-    form.post('/login', {
+    form.post(appPath('/login'), {
         preserveScroll: true,
     });
 }
@@ -38,7 +39,7 @@ function submit() {
             </div>
 
             <div class="login-card">
-                <img src="/images/deped-ozamiz-2.png" alt="DepEd Ozamiz Logo" class="login-logo" />
+                <img :src="assetPath('/images/deped-ozamiz-2.png')" alt="DepEd Ozamiz Logo" class="login-logo" />
                 <h2>Log in to your account</h2>
 
                 <div v-if="form.errors.email" class="login-error">

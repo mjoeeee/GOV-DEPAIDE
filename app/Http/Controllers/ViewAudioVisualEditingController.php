@@ -73,6 +73,6 @@ class ViewAudioVisualEditingController extends Controller
         $audioVisual->style_tone = $validated['styleTone'] ?? null;
         $audioVisual->save();
 
-        return redirect("/status/view/audio-visual-editing/{$requestId}?update=success");
+        return redirect()->route('status.view.audio-visual-editing', ['requestId' => $requestId, 'update' => 'success']);
     }
 }

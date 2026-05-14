@@ -143,7 +143,7 @@ return [
     |
     */
 
-    'path' => env('SESSION_PATH', '/'),
+    'path' => env('SESSION_PATH') ?: (trim((string) env('BASE_PATH', ''), '/') ? '/'.trim((string) env('BASE_PATH', ''), '/') : '/'),
 
     /*
     |--------------------------------------------------------------------------

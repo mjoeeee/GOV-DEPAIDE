@@ -3,6 +3,7 @@ import { ref, watch } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -121,7 +122,7 @@ function submit() {
         form.deliveryMethod = form.otherDeliveryMethod;
     }
 
-    form.post('/audio-visual', {
+    form.post(appPath('/audio-visual'), {
         preserveScroll: true,
         onSuccess: () => {
             Swal.fire({ icon: 'success', title: 'Success!', text: 'Digital production request submitted.', timer: 2000, showConfirmButton: false });

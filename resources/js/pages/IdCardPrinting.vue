@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath, assetPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -66,7 +67,7 @@ function handleFileChange(event: Event, field: 'image' | 'sign') {
 }
 
 function submit() {
-    form.post('/id-card-printing', {
+    form.post(appPath('/id-card-printing'), {
         preserveScroll: true,
         onSuccess: () => {
             Swal.fire({ icon: 'success', title: 'Success!', text: 'ID Card Printing request submitted.', timer: 2000, showConfirmButton: false });
@@ -94,7 +95,7 @@ function submit() {
                         <strong>ID Picture</strong>
                     </label>
                     <div class="preview-image">
-                        <img :src="photoPreview || '/images/2x2-default.png'" alt="ID Picture Preview" />
+                        <img :src="photoPreview || assetPath('/images/2x2-default.png')" alt="ID Picture Preview" />
                     </div>
                     <input id="image" type="file" accept=".jpg,.jpeg" @change="(event) => handleFileChange(event, 'image')" />
                     <p class="hint">JPG/JPEG, 2x2 inches, white background.</p>
@@ -105,7 +106,7 @@ function submit() {
                         <strong>Signature</strong>
                     </label>
                     <div class="preview-image">
-                        <img :src="signPreview || '/images/2x2-signature.png'" alt="Signature Preview" />
+                        <img :src="signPreview || assetPath('/images/2x2-signature.png')" alt="Signature Preview" />
                     </div>
                     <input id="sign" type="file" accept=".png" @change="(event) => handleFileChange(event, 'sign')" />
                     <p class="hint">PNG, 2x2 inches, white background.</p>

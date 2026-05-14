@@ -72,6 +72,6 @@ class ViewIctInspectionController extends Controller
             'scope_last_repair' => $validated['scopeLastRepair'] ?? null,
         ]);
 
-        return redirect("/status/view/ict-inspection/{$requestId}?update=success");
+        return redirect()->route('status.view.ict-inspection', ['requestId' => $requestId, 'update' => 'success']);
     }
 }

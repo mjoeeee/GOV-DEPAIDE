@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import DepAideLayout from '@/layouts/DepAideLayout.vue';
 import Swal from 'sweetalert2';
+import { appPath } from '@/lib/basePath';
 
 defineOptions({ layout: DepAideLayout });
 
@@ -26,7 +27,7 @@ function previewImage(e: Event) {
 }
 
 function submit() {
-    form.post('/email-concern', {
+    form.post(appPath('/email-concern'), {
         forceFormData: true,
         preserveScroll: true,
         onSuccess: () => {

@@ -95,6 +95,6 @@ class ViewIdCardPrintingController extends Controller
         $idCard->ext_name = $validated['extName'] ?? $idCard->ext_name;
         $idCard->save();
 
-        return redirect("/status/view/id-card-printing/{$requestId}?update=success");
+        return redirect()->route('status.view.id-card-printing', ['requestId' => $requestId, 'update' => 'success']);
     }
 }

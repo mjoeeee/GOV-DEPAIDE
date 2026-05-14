@@ -7,7 +7,7 @@ return [
     'email' => 'email',
     'lowercase_usernames' => true,
     'home' => '/dashboard',
-    'prefix' => '',
+    'prefix' => trim((string) env('BASE_PATH', ''), '/'),
     'domain' => null,
     'middleware' => ['web'],
     'limiters' => [

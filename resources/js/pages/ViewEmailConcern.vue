@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import MinimalLayout from '@/layouts/MinimalLayout.vue';
+import { appPath } from '@/lib/basePath';
 import Swal from 'sweetalert2';
 
 defineOptions({ layout: MinimalLayout });
@@ -33,7 +34,7 @@ function previewImage(e: Event) {
 }
 
 function submit() {
-    form.post(`/status/view/email-concern/${props.concern.request_id}`, { forceFormData: true });
+    form.post(appPath(`/status/view/email-concern/${props.concern.request_id}`), { forceFormData: true });
 }
 
 onMounted(() => {
@@ -78,7 +79,7 @@ onMounted(() => {
 
             <div class="d-flex justify-content-between mt-3">
                 <button type="submit" class="btn btn-primary" :disabled="form.processing"><i class="fas fa-save"></i> Update Details</button>
-                <a href="/status" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
+                <a :href="appPath('/status')" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
             </div>
         </form>
     </div>

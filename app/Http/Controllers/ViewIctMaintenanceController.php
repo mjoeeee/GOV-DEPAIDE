@@ -85,6 +85,6 @@ class ViewIctMaintenanceController extends Controller
             'defects' => $validated['defects'] ?? null,
         ]);
 
-        return redirect("/status/view/ict-maintenance/{$requestId}?update=success");
+        return redirect()->route('status.view.ict-maintenance', ['requestId' => $requestId, 'update' => 'success']);
     }
 }

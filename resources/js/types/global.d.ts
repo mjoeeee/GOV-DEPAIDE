@@ -1,9 +1,11 @@
 import type { Auth } from '@/types/auth';
+import type { createHeadManager, Page, Router } from '@inertiajs/core';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
     interface ImportMetaEnv {
         readonly VITE_APP_NAME: string;
+        readonly VITE_APP_BASE_PATH?: string;
         [key: string]: string | boolean | undefined;
     }
 
@@ -29,5 +31,6 @@ declare module 'vue' {
         $inertia: typeof Router;
         $page: Page;
         $headManager: ReturnType<typeof createHeadManager>;
+        $asset: (path: string) => string;
     }
 }

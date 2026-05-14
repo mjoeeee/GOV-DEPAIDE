@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'base_path' => trim((string) env('BASE_PATH', ''), '/'),
+    'base_path' => trim((string) (env('BASE_PATH') ?: env('VITE_APP_BASE_PATH', '')), '/'),
 
     /*
     |--------------------------------------------------------------------------

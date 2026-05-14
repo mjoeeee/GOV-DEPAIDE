@@ -1,5 +1,20 @@
 import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, router } from '@inertiajs/vue3';
+import {
+    asset,
+    configureDomBasePath,
+    configureFetchBasePath,
+    configureInertiaRouterBasePath,
+    configureWayfinderBasePath,
+} from './lib/basePath';
+
+configureFetchBasePath();
+configureDomBasePath();
+configureInertiaRouterBasePath(router);
+configureWayfinderBasePath([
+    ...Object.values(import.meta.glob('./routes/**/*.ts', { eager: true })),
+    ...Object.values(import.meta.glob('./actions/**/*.ts', { eager: true })),
+]);
 
 const appName = import.meta.env.VITE_APP_NAME || 'DepAIDE';
 
@@ -10,9 +25,11 @@ createInertiaApp({
         return pages[`./pages/${name}.vue`];
     },
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .mount(el);
+        const vueApp = createApp({ render: () => h(App, props) }).use(plugin);
+
+        vueApp.config.globalProperties.$asset = asset;
+        vueApp.provide('asset', asset);
+        vueApp.mount(el);
     },
     progress: {
         color: '#007bff',

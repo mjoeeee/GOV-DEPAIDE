@@ -15,9 +15,11 @@ class BasePathRoutingTest extends TestCase
 
     protected function setUp(): void
     {
-        putenv('BASE_PATH=/depaide');
-        $_ENV['BASE_PATH'] = '/depaide';
-        $_SERVER['BASE_PATH'] = '/depaide';
+        putenv('BASE_PATH');
+        unset($_ENV['BASE_PATH'], $_SERVER['BASE_PATH']);
+        putenv('VITE_APP_BASE_PATH=/depaide');
+        $_ENV['VITE_APP_BASE_PATH'] = '/depaide';
+        $_SERVER['VITE_APP_BASE_PATH'] = '/depaide';
 
         parent::setUp();
     }
@@ -26,8 +28,8 @@ class BasePathRoutingTest extends TestCase
     {
         parent::tearDown();
 
-        putenv('BASE_PATH');
-        unset($_ENV['BASE_PATH'], $_SERVER['BASE_PATH']);
+        putenv('VITE_APP_BASE_PATH');
+        unset($_ENV['VITE_APP_BASE_PATH'], $_SERVER['VITE_APP_BASE_PATH']);
     }
 
     public function test_login_screen_can_be_rendered_under_base_path(): void

@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').(trim((string) env('BASE_PATH', ''), '/') ? '/'.trim((string) env('BASE_PATH', ''), '/') : '').'/storage',
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').(trim((string) (env('BASE_PATH') ?: env('VITE_APP_BASE_PATH', '')), '/') ? '/'.trim((string) (env('BASE_PATH') ?: env('VITE_APP_BASE_PATH', '')), '/') : '').'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
